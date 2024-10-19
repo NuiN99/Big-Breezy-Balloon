@@ -107,7 +107,7 @@ MonoBehaviour:
     <Max>k__BackingField: 0
   verticalDragRange:
     <Min>k__BackingField: 1
-    <Max>k__BackingField: 0.997
+    <Max>k__BackingField: 0.9995
   collisionDampRange:
     <Min>k__BackingField: 0.5
     <Max>k__BackingField: 1
