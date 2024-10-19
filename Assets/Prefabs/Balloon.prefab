@@ -103,7 +103,7 @@ MonoBehaviour:
     <Min>k__BackingField: 0
     <Max>k__BackingField: 1
   frictionRange:
-    <Min>k__BackingField: 1
+    <Min>k__BackingField: 0
     <Max>k__BackingField: 0
   verticalDragRange:
     <Min>k__BackingField: 1
