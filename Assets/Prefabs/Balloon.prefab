@@ -109,19 +109,31 @@ MonoBehaviour:
     <Min>k__BackingField: 1
     <Max>k__BackingField: 0.997
   collisionDampRange:
-    <Min>k__BackingField: 0.25
+    <Min>k__BackingField: 0.5
     <Max>k__BackingField: 1
   speedRange:
     <Min>k__BackingField: 200
     <Max>k__BackingField: 250
   scaleRange:
-    <Min>k__BackingField: 0.1
-    <Max>k__BackingField: 1
+    <Min>k__BackingField: {x: 0.05, y: 0.3, z: 0.05}
+    <Max>k__BackingField: {x: 1, y: 1, z: 1}
   camZoomRange:
     <Min>k__BackingField: 2
     <Max>k__BackingField: 5
   inflateSpeed: 0.25
   aimYMult: 1
+  minSoftBodyParams:
+    <Spring>k__BackingField: 10
+    <Damper>k__BackingField: 1
+    <MinDistance>k__BackingField: 0
+    <MaxDistance>k__BackingField: 0.1
+    <Tolerance>k__BackingField: 0
+  maxSoftBodyParams:
+    <Spring>k__BackingField: 5000
+    <Damper>k__BackingField: 5
+    <MinDistance>k__BackingField: 0
+    <MaxDistance>k__BackingField: 0
+    <Tolerance>k__BackingField: 0
   deflateSpeed: 0.5
   deflateForceRange:
     <Min>k__BackingField: 7
@@ -138,15 +150,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 0b88232c6ed55ec49be9abb196c88c93, type: 3}
       propertyPath: m_LocalScale.x
-      value: 5.734784
+      value: 4.5588093
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b88232c6ed55ec49be9abb196c88c93, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.7364986
+      value: 2.970292
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b88232c6ed55ec49be9abb196c88c93, type: 3}
       propertyPath: m_LocalScale.z
-      value: 5.734784
+      value: 4.5588093
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b88232c6ed55ec49be9abb196c88c93, type: 3}
       propertyPath: m_LocalPosition.x
@@ -245,7 +257,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4318680812147065380}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

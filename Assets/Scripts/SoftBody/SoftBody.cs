@@ -14,10 +14,9 @@ public class SoftBody : MonoBehaviour
     [SerializeField] private SoftBodyParams defaultParams = new SoftBodyParams();
 
 #if UNITY_EDITOR
-    [SerializeField] private bool _centerBoneColliders = true;
+    [SerializeField] bool centerBoneColliders = true;
 
-
-    private void Reset()
+    void Reset()
     {
         Transform armature;
         if (name != "Armature")
@@ -63,7 +62,7 @@ public class SoftBody : MonoBehaviour
             if (collider == null)
                 collider = child.AddComponent<SphereCollider>();
 
-            if (_centerBoneColliders && child.childCount > 0)
+            if (centerBoneColliders && child.childCount > 0)
             {
                 Transform boneTip = child.GetChild(0);
                 Vector3 centerPoint = child.InverseTransformPoint(boneTip.position - child.position);
@@ -104,7 +103,7 @@ public class SoftBody : MonoBehaviour
     }
 #endif
 
-    [SerializeField] private Rigidbody RB;
+    [field: SerializeField] public Rigidbody RB { get; private set; }
     [SerializeField, HideInInspector] Vector3[] bonePositions;
     [SerializeField, HideInInspector] Quaternion[] boneRotations;
     [SerializeField] Rigidbody[] bones;

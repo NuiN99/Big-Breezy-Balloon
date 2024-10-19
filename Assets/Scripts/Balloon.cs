@@ -99,7 +99,7 @@ public class Balloon : MonoBehaviour
         //else
         //    softBody.SetSoft();
 
-        curBodyParams.Lerp(deflatedBodyParams, inflatedBodyParams, t);
+        //curBodyParams.Lerp(deflatedBodyParams, inflatedBodyParams, t);
         softBody.UpdateSprings(curBodyParams);
     }
 }
