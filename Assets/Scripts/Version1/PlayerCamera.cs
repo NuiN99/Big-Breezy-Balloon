@@ -22,6 +22,12 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
     public void AssignTrackingTarget(Transform target)
     {
         Cam.Target.TrackingTarget = target;

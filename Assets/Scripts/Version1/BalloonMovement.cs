@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using NuiN.NExtensions;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class BalloonMovement : MonoBehaviour
     [Header("Physics")]
     [SerializeField] FloatRange gravityRange;
     [SerializeField] FloatRange dragRange;
+    [SerializeField] FloatRange angularDragRange;
     [SerializeField] FloatRange bounceRange;
     [SerializeField] FloatRange frictionRange;
     [SerializeField] float bounceForce;
@@ -19,13 +21,18 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] FloatRange speedRange;
     [SerializeField] FloatRange scaleRange;
     [SerializeField] float inflateSpeed;
-
-    [SerializeField] float maxSize;
+    [SerializeField] float aimYMult = 4f;
+    
+    [Header("Deflating")] 
+    [SerializeField] float deflateSpeed;
+    [SerializeField] FloatRange deflateForceRange;
+    
+    bool _isDeflating;
     
     float _curSize;
     float _gravity;
 
-    float SizeLerp => _curSize / maxSize;
+    float SizeLerp => _curSize;
     float InverseSizeLerp => 1 - SizeLerp;
 
     void Start()
@@ -36,20 +43,7 @@ public class BalloonMovement : MonoBehaviour
     void FixedUpdate()
     {
         rb.AddForce(Vector3.down * (_gravity * Time.fixedDeltaTime), ForceMode.Acceleration);
-        
-        float baseSpringStrength = 10f; // Base spring strength
-        float damperStrength = 0.75f; // Damper strength
-
-        // Calculate the angle from upright
-        float angleFromUpright = Vector3.Angle(rb.transform.up, Vector3.up);
-    
-        // Scale the spring strength based on the angle (you can adjust the scaling factor)
-        float springStrength = baseSpringStrength * (angleFromUpright / 90f); // Scale from 0 to base strength
-        springStrength = Mathf.Clamp(springStrength, 0, baseSpringStrength * 2); // Cap the maximum strength
-
-        var springTorque = springStrength * Vector3.Cross(rb.transform.up, Vector3.up);
-        var dampTorque = damperStrength * -rb.angularVelocity;
-        rb.AddTorque(springTorque + dampTorque, ForceMode.Acceleration);
+        FaceCameraDirection();
     }
     
     void OnCollisionEnter(Collision other)
@@ -59,27 +53,53 @@ public class BalloonMovement : MonoBehaviour
 
     public void Inflate()
     {
+        if (_isDeflating) 
+            return;
+        
         float speed = inflateSpeed * Time.deltaTime;
-        _curSize = Mathf.Clamp(_curSize + speed, 0, maxSize);
+        _curSize = Mathf.Clamp01(_curSize + speed);
         
         UpdateValues();
+    }
+
+
+    public void Deflate()
+    {
+        if (!_isDeflating)
+        {
+            StartCoroutine(DeflateRoutine());
+        }
+    }
+
+    IEnumerator DeflateRoutine()
+    {
+        _isDeflating = true;
+
+        while (_curSize > 0)
+        {
+            _curSize -= deflateSpeed * Time.fixedDeltaTime;
+            UpdateValues();
+
+            float force = deflateForceRange.Lerp(SizeLerp) * Time.fixedDeltaTime;
+            rb.AddForce(transform.up * force, ForceMode.VelocityChange);
+            
+            yield return new WaitForFixedUpdate();
+        }
+
+        _isDeflating = false;
     }
 
     void UpdateValues()
     {
         transform.localScale = Vector3.Lerp(Vector3.one * scaleRange.Min, Vector3.one * scaleRange.Max, SizeLerp);
         rb.linearDamping = dragRange.Lerp(SizeLerp);
+        rb.angularDamping = angularDragRange.Lerp(SizeLerp);
         col.material.bounciness = bounceRange.Lerp(SizeLerp);
         col.material.dynamicFriction = frictionRange.Lerp(InverseSizeLerp);
         col.material.staticFriction = frictionRange.Lerp(InverseSizeLerp);
         _gravity = gravityRange.Lerp(SizeLerp);
     }
 
-    public void Deflate()
-    {
-        
-    }
-    
     public void Move(Vector3 direction)
     {
         if (SizeLerp <= 0) return;
@@ -93,5 +113,23 @@ public class BalloonMovement : MonoBehaviour
         ContactPoint contact = collision.GetContact(0);
         Vector3 reflectDirection = Vector3.Reflect(rb.linearVelocity, contact.normal);
         rb.AddForceAtPosition(contact.point, reflectDirection * SizeLerp * bounceForce);
+    }
+
+    void FaceCameraDirection()
+    {
+        float baseSpringStrength = 10f;
+        float damperStrength = 0.75f;
+
+        Vector3 up = transform.up;
+        Vector3 fwd = PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized;
+        
+        float angleFromUpright = Vector3.Angle(up, fwd);
+    
+        float springStrength = baseSpringStrength * (angleFromUpright / 90f);
+        springStrength = Mathf.Clamp(springStrength, 0, baseSpringStrength * 2);
+
+        var springTorque = springStrength * Vector3.Cross(up, fwd);
+        var dampTorque = damperStrength * -rb.angularVelocity;
+        rb.AddTorque(springTorque + dampTorque, ForceMode.Acceleration);
     }
 }

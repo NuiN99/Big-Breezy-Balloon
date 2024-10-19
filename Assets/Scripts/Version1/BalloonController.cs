@@ -16,6 +16,8 @@ public class BalloonController : MonoBehaviour
     {
         _controls = new PlayerControls();
         _controls.Enable();
+
+        _controls.Balloon.Deflate.performed += _ => movement.Deflate();
     }
 
     void OnDisable()
@@ -37,12 +39,6 @@ public class BalloonController : MonoBehaviour
         if (_controls.Balloon.Inflate.IsPressed())
         {
             movement.Inflate();
-        }
-
-        if (_controls.Balloon.Deflate.IsPressed())
-        {
-            transform.position = new Vector3(0, 3, 0);
-            GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         }
     }
 }
