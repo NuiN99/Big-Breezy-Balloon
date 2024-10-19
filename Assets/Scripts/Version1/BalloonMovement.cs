@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class BalloonMovement : MonoBehaviour
 {
-    [Header("Dependencies")] 
+    [Header("Dependencies")]
+    [SerializeField] SoftBody softBody;
     [SerializeField] Rigidbody rb;
     [SerializeField] Collider col;
     
@@ -107,7 +108,8 @@ public class BalloonMovement : MonoBehaviour
         if (SizeLerp <= 0) return;
         
         float speed = speedRange.Lerp(SizeLerp) * Time.fixedDeltaTime;
-        rb.AddForce(direction * speed, ForceMode.Acceleration);
+        //rb.AddForce(direction * speed, ForceMode.Acceleration);
+        softBody.DistributeForce(direction * speed, ForceMode.Acceleration);
     }
 
     void Bounce(Collision collision)

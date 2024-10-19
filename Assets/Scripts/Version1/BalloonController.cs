@@ -28,17 +28,20 @@ public class BalloonController : MonoBehaviour
 
     void Update()
     {
-        if (_controls.Balloon.Move.IsPressed())
-        {
-            Vector2 input = _controls.Balloon.Move.ReadValue<Vector2>();
-            Vector3 moveDirection = ((PlayerCamera.Instance.Forward * input.y) + (PlayerCamera.Instance.Right * input.x)).With(y:0);
-            
-            movement.Move(moveDirection);
-        }
-
         if (_controls.Balloon.Inflate.IsPressed())
         {
             movement.Inflate();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (_controls.Balloon.Move.IsPressed())
+        {
+            Vector2 input = _controls.Balloon.Move.ReadValue<Vector2>();
+            Vector3 moveDirection = ((PlayerCamera.Instance.Forward * input.y) + (PlayerCamera.Instance.Right * input.x)).With(y: 0);
+
+            movement.Move(moveDirection);
         }
     }
 }
