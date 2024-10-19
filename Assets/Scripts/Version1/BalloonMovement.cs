@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using NuiN.NExtensions;
+using NuiN.SpleenTween;
 using UnityEngine;
 
 public class BalloonMovement : MonoBehaviour
@@ -84,7 +85,8 @@ public class BalloonMovement : MonoBehaviour
     
     void OnCollisionEnter(Collision other)
     {
-        float collisionDamp = collisionDampRange.Lerp(SizeLerp * SizeLerp);
+        float expoLerp = SpleenExt.GetEase(SizeLerp, Ease.OutExpo);
+        float collisionDamp = collisionDampRange.Lerp(expoLerp);
         rb.linearVelocity *= collisionDamp;
     }
 
@@ -140,7 +142,9 @@ public class BalloonMovement : MonoBehaviour
         col.material.dynamicFriction = frictionRange.Lerp(InverseSizeLerp);
         col.material.staticFriction = frictionRange.Lerp(InverseSizeLerp);
         _gravity = gravityRange.Lerp(SizeLerp);
-        PlayerCamera.Instance.SetZoom(camZoomRange.Lerp(SizeLerp * SizeLerp * SizeLerp));
+
+        float zoomEase = SpleenExt.GetEase(SizeLerp, Ease.InQuint);
+        PlayerCamera.Instance.SetZoom(camZoomRange.Lerp(zoomEase));
     }
 
     public void Move(Vector3 direction)
