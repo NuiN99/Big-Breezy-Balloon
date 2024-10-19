@@ -111,6 +111,9 @@ MonoBehaviour:
   scaleRange:
     <Min>k__BackingField: 0.1
     <Max>k__BackingField: 1
+  camZoomRange:
+    <Min>k__BackingField: 2
+    <Max>k__BackingField: 5
   inflateSpeed: 0.25
   aimYMult: 4
   deflateSpeed: 0.5

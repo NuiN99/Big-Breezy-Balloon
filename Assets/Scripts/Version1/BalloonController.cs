@@ -7,7 +7,7 @@ public class BalloonController : MonoBehaviour
     
     PlayerControls _controls;
 
-    void Awake()
+    void Start()
     {
         PlayerCamera.Instance.AssignTrackingTarget(transform);
     }

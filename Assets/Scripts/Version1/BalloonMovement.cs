@@ -20,6 +20,7 @@ public class BalloonMovement : MonoBehaviour
     [Header("Other")]
     [SerializeField] FloatRange speedRange;
     [SerializeField] FloatRange scaleRange;
+    [SerializeField] FloatRange camZoomRange;
     [SerializeField] float inflateSpeed;
     [SerializeField] float aimYMult = 4f;
     
@@ -98,6 +99,7 @@ public class BalloonMovement : MonoBehaviour
         col.material.dynamicFriction = frictionRange.Lerp(InverseSizeLerp);
         col.material.staticFriction = frictionRange.Lerp(InverseSizeLerp);
         _gravity = gravityRange.Lerp(SizeLerp);
+        PlayerCamera.Instance.SetZoom(camZoomRange.Lerp(SizeLerp * SizeLerp * SizeLerp));
     }
 
     public void Move(Vector3 direction)

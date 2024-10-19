@@ -9,6 +9,8 @@ public class PlayerCamera : MonoBehaviour
     public Vector3 Right => Cam.transform.right;
     
     [field: SerializeField] public CinemachineCamera Cam { get; private set; }
+
+    [SerializeField] CinemachineOrbitalFollow orbitalFollow;
     
     void Awake()
     {
@@ -31,5 +33,10 @@ public class PlayerCamera : MonoBehaviour
     public void AssignTrackingTarget(Transform target)
     {
         Cam.Target.TrackingTarget = target;
+    }
+
+    public void SetZoom(float zoom)
+    {
+        orbitalFollow.Radius = zoom;
     }
 }
