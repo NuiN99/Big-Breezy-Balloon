@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Linq;
 using NuiN.NExtensions;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class BalloonMovement : MonoBehaviour
@@ -18,7 +16,7 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] FloatRange bounceRange;
     [SerializeField] FloatRange frictionRange;
     [SerializeField] FloatRange verticalDragRange;
-    [SerializeField] float bounceForce;
+    [SerializeField] FloatRange collisionDampRange;
     
     [Header("Other")]
     [SerializeField] FloatRange speedRange;
@@ -86,7 +84,8 @@ public class BalloonMovement : MonoBehaviour
     
     void OnCollisionEnter(Collision other)
     {
-        Bounce(other);
+        float collisionDamp = collisionDampRange.Lerp(SizeLerp * SizeLerp);
+        rb.linearVelocity *= collisionDamp;
     }
 
     public void Inflate()
@@ -151,13 +150,6 @@ public class BalloonMovement : MonoBehaviour
         float speed = speedRange.Lerp(SizeLerp) * Time.fixedDeltaTime;
         rb.AddForce(direction * speed, ForceMode.Acceleration);
         //softBody.DistributeForce(direction * speed, ForceMode.Acceleration);
-    }
-
-    void Bounce(Collision collision)
-    {
-        ContactPoint contact = collision.GetContact(0);
-        Vector3 reflectDirection = Vector3.Reflect(rb.linearVelocity, contact.normal);
-        rb.AddForceAtPosition(contact.point, reflectDirection * SizeLerp * bounceForce);
     }
 
     public void StartAiming()
