@@ -71,7 +71,7 @@ public class BalloonMovement : MonoBehaviour
         float damperStrength = faceCameraFwd ? 5f : 0.75f;
 
         Vector3 up = transform.up;
-        Vector3 fwd = faceCameraFwd ? PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized : Vector3.up + -rb.linearVelocity.normalized);
+        Vector3 fwd = faceCameraFwd ? PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized : Vector3.up + -rb.linearVelocity.normalized;
         
         float angleFromUpright = Vector3.Angle(up, fwd);
     
