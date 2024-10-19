@@ -11,9 +11,11 @@ using UnityEngine;
 
 public class SoftBody : MonoBehaviour
 {
-    [SerializeField] private SoftBodyParams defaultParams;
+    [SerializeField] private SoftBodyParams defaultParams = new SoftBodyParams();
 
 #if UNITY_EDITOR
+    [SerializeField] private bool _centerBoneColliders = true;
+
 
     private void Reset()
     {
@@ -26,6 +28,10 @@ public class SoftBody : MonoBehaviour
         }
         else
             armature = transform;
+
+        RB = armature.GetComponent<Rigidbody>();
+        if (RB == null)
+            RB = armature.AddComponent<Rigidbody>();
     
         List<SpringJoint> springJoints = GetComponents<SpringJoint>().ToList();
         while (springJoints.Count < armature.childCount)
@@ -45,17 +51,26 @@ public class SoftBody : MonoBehaviour
             Transform child = armature.GetChild(i);
             Rigidbody rb = child.GetComponent<Rigidbody>();
 
-            bonePositions[i] = rb.transform.localPosition;
-            boneRotations[i] = rb.rotation;
-
             if (rb == null)
                 rb = child.AddComponent<Rigidbody>();
+
+            bonePositions[i] = rb.transform.localPosition;
+            boneRotations[i] = rb.rotation;
 
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
             SphereCollider collider = child.GetComponent<SphereCollider>();
             if (collider == null)
                 collider = child.AddComponent<SphereCollider>();
+
+            if (_centerBoneColliders && child.childCount > 0)
+            {
+                Transform boneTip = child.GetChild(0);
+                Vector3 centerPoint = child.InverseTransformPoint(boneTip.position - child.position);
+                collider.center = centerPoint;
+            }
+            else
+                collider.center = Vector3.zero;
 
             springJoints[i].connectedBody = rb;
             ApplySpringConfig(springJoints[i], defaultParams);
@@ -89,7 +104,7 @@ public class SoftBody : MonoBehaviour
     }
 #endif
 
-    [SerializeField] private Rigidbody rb;
+    [SerializeField] private Rigidbody RB;
     [SerializeField, HideInInspector] Vector3[] bonePositions;
     [SerializeField, HideInInspector] Quaternion[] boneRotations;
     [SerializeField] Rigidbody[] bones;
@@ -157,7 +172,7 @@ public class SoftBody : MonoBehaviour
 
     public void DistributeForce(Vector3 force, ForceMode forceMode)
     {
-        rb.AddForce(force, forceMode);
+        RB.AddForce(force, forceMode);
         for (int i = 0; i < bones.Length; i++)
             bones[i].AddForce(force, forceMode);
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using NuiN.NExtensions;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class BalloonMovement : MonoBehaviour
@@ -36,11 +37,14 @@ public class BalloonMovement : MonoBehaviour
     float _curSize;
     float _gravity;
 
+    private Vector3 initialScale;
+
     float SizeLerp => _curSize;
     float InverseSizeLerp => 1 - SizeLerp;
 
     void Start()
     {
+        initialScale = rb.transform.localScale;
         inflateCooldown.Init();
         _waitForFixedUpdate = new WaitForFixedUpdate();
         UpdateValues();
@@ -125,7 +129,7 @@ public class BalloonMovement : MonoBehaviour
 
     void UpdateValues()
     {
-        transform.localScale = Vector3.Lerp(Vector3.one * scaleRange.Min, Vector3.one * scaleRange.Max, SizeLerp);
+        transform.localScale = Vector3.Lerp(initialScale * scaleRange.Min, initialScale * scaleRange.Max, SizeLerp);
         rb.linearDamping = dragRange.Lerp(SizeLerp);
         rb.angularDamping = angularDragRange.Lerp(SizeLerp);
         col.material.bounciness = bounceRange.Lerp(SizeLerp);
