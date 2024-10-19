@@ -17,7 +17,8 @@ public class BalloonController : MonoBehaviour
         _controls = new PlayerControls();
         _controls.Enable();
 
-        _controls.Balloon.Deflate.performed += _ => movement.Deflate();
+        _controls.Balloon.Deflate.performed += _ => movement.StartAiming();
+        _controls.Balloon.Deflate.canceled += _ => movement.Deflate();
     }
 
     void OnDisable()

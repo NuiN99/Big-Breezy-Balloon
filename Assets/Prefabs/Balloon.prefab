@@ -96,7 +96,7 @@ MonoBehaviour:
     <Min>k__BackingField: 0
     <Max>k__BackingField: 0.1
   angularDragRange:
-    <Min>k__BackingField: 5
+    <Min>k__BackingField: 0
     <Max>k__BackingField: 0
   bounceRange:
     <Min>k__BackingField: 0
@@ -120,6 +120,8 @@ MonoBehaviour:
   deflateForceRange:
     <Min>k__BackingField: 7
     <Max>k__BackingField: 1
+  inflateCooldown:
+    seconds: 1
 --- !u!1001 &3976221627617607541
 PrefabInstance:
   m_ObjectHideFlags: 0
