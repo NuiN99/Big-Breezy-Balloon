@@ -27,9 +27,11 @@ public class BalloonMovement : MonoBehaviour
     [Header("Deflating")] 
     [SerializeField] float deflateSpeed;
     [SerializeField] FloatRange deflateForceRange;
-    
+    [SerializeField] SerializedWaitForSeconds inflateCooldown;
+
+    WaitForFixedUpdate _waitForFixedUpdate;
     bool _isDeflating;
-    
+    bool _isAiming;
     float _curSize;
     float _gravity;
 
@@ -38,13 +40,39 @@ public class BalloonMovement : MonoBehaviour
 
     void Start()
     {
+        inflateCooldown.Init();
+        _waitForFixedUpdate = new WaitForFixedUpdate();
         UpdateValues();
     }
 
     void FixedUpdate()
     {
         rb.AddForce(Vector3.down * (_gravity * Time.fixedDeltaTime), ForceMode.Acceleration);
-        FaceCameraDirection();
+
+        if (Physics.Raycast(transform.position, Vector3.down, 1f))
+        {
+            rb.AddForce(Vector3.up * (_gravity * SizeLerp * Time.fixedDeltaTime * 1.5f), ForceMode.Acceleration);
+        }
+        
+        Rotate(_isDeflating || _isAiming);
+    }
+
+    public void Rotate(bool faceCameraFwd)
+    {
+        float baseSpringStrength = faceCameraFwd ? 17.5f : 15f;
+        float damperStrength = faceCameraFwd ? 2f : 0.75f;
+
+        Vector3 up = transform.up;
+        Vector3 fwd = faceCameraFwd ? PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized : Vector3.up;
+        
+        float angleFromUpright = Vector3.Angle(up, fwd);
+    
+        float springStrength = baseSpringStrength * (angleFromUpright / 90f);
+        springStrength = Mathf.Clamp(springStrength, 0, baseSpringStrength * 2);
+
+        var springTorque = springStrength * Vector3.Cross(up, fwd);
+        var dampTorque = damperStrength * -rb.angularVelocity;
+        rb.AddTorque(springTorque + dampTorque, ForceMode.Acceleration);
     }
     
     void OnCollisionEnter(Collision other)
@@ -66,7 +94,9 @@ public class BalloonMovement : MonoBehaviour
 
     public void Deflate()
     {
-        if (!_isDeflating)
+        _isAiming = false;
+
+        if (!_isDeflating && SizeLerp > 0)
         {
             StartCoroutine(DeflateRoutine());
         }
@@ -83,10 +113,12 @@ public class BalloonMovement : MonoBehaviour
 
             float force = deflateForceRange.Lerp(SizeLerp) * Time.fixedDeltaTime;
             rb.AddForce(transform.up * force, ForceMode.VelocityChange);
-            
-            yield return new WaitForFixedUpdate();
+
+            yield return _waitForFixedUpdate;
         }
 
+        yield return inflateCooldown.Wait;
+        
         _isDeflating = false;
     }
 
@@ -117,21 +149,8 @@ public class BalloonMovement : MonoBehaviour
         rb.AddForceAtPosition(contact.point, reflectDirection * SizeLerp * bounceForce);
     }
 
-    void FaceCameraDirection()
+    public void StartAiming()
     {
-        float baseSpringStrength = 10f;
-        float damperStrength = 0.75f;
-
-        Vector3 up = transform.up;
-        Vector3 fwd = PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized;
-        
-        float angleFromUpright = Vector3.Angle(up, fwd);
-    
-        float springStrength = baseSpringStrength * (angleFromUpright / 90f);
-        springStrength = Mathf.Clamp(springStrength, 0, baseSpringStrength * 2);
-
-        var springTorque = springStrength * Vector3.Cross(up, fwd);
-        var dampTorque = damperStrength * -rb.angularVelocity;
-        rb.AddTorque(springTorque + dampTorque, ForceMode.Acceleration);
+        _isAiming = true;
     }
 }
