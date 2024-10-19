@@ -121,7 +121,7 @@ MonoBehaviour:
     <Min>k__BackingField: 2
     <Max>k__BackingField: 5
   inflateSpeed: 0.25
-  aimYMult: 4
+  aimYMult: 1
   deflateSpeed: 0.5
   deflateForceRange:
     <Min>k__BackingField: 7

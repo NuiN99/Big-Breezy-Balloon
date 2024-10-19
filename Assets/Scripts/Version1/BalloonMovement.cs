@@ -68,10 +68,10 @@ public class BalloonMovement : MonoBehaviour
     public void Rotate(bool faceCameraFwd)
     {
         float baseSpringStrength = faceCameraFwd ? 17.5f : 15f;
-        float damperStrength = faceCameraFwd ? 2f : 0.75f;
+        float damperStrength = faceCameraFwd ? 5f : 0.75f;
 
         Vector3 up = transform.up;
-        Vector3 fwd = faceCameraFwd ? PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized : Vector3.up;
+        Vector3 fwd = faceCameraFwd ? PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized : Vector3.up + -rb.linearVelocity.normalized);
         
         float angleFromUpright = Vector3.Angle(up, fwd);
     
@@ -136,15 +136,15 @@ public class BalloonMovement : MonoBehaviour
     {
         transform.localScale = Vector3.Lerp(Vector3.one * scaleRange.Min, Vector3.one * scaleRange.Max, SizeLerp);
         rb.linearDamping = dragRange.Lerp(SizeLerp);
-        _verticalDrag = verticalDragRange.Lerp(SizeLerp);
         rb.angularDamping = angularDragRange.Lerp(SizeLerp);
         col.material.bounciness = bounceRange.Lerp(SizeLerp);
         col.material.dynamicFriction = frictionRange.Lerp(InverseSizeLerp);
         col.material.staticFriction = frictionRange.Lerp(InverseSizeLerp);
+        _verticalDrag = verticalDragRange.Lerp(SizeLerp);
         _gravity = gravityRange.Lerp(SizeLerp);
 
-        float zoomEase = SpleenExt.GetEase(SizeLerp, Ease.InQuint);
-        PlayerCamera.Instance.SetZoom(camZoomRange.Lerp(zoomEase));
+        float lerpBigger = SpleenExt.GetEase(SizeLerp, Ease.InQuint);
+        PlayerCamera.Instance.SetZoom(camZoomRange.Lerp(lerpBigger));
     }
 
     public void Move(Vector3 direction)
