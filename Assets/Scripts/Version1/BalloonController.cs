@@ -27,16 +27,13 @@ public class BalloonController : MonoBehaviour
         _controls = null;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
         if (_controls.Balloon.Inflate.IsPressed())
         {
             movement.Inflate();
         }
-    }
-
-    private void FixedUpdate()
-    {
+        
         if (_controls.Balloon.Move.IsPressed())
         {
             Vector2 input = _controls.Balloon.Move.ReadValue<Vector2>();

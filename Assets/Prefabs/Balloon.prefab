@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49356adbcc64df9bd69daf276b363a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  softBody: {fileID: 0}
   rb: {fileID: 3573652371076637088}
   col: {fileID: 8793111616429348482}
   gravityRange:
@@ -104,6 +105,9 @@ MonoBehaviour:
   frictionRange:
     <Min>k__BackingField: 1
     <Max>k__BackingField: 0
+  verticalDragRange:
+    <Min>k__BackingField: 1
+    <Max>k__BackingField: 0.995
   bounceForce: 0
   speedRange:
     <Min>k__BackingField: 200

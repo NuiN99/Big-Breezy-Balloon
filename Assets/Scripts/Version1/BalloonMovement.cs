@@ -17,6 +17,7 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] FloatRange angularDragRange;
     [SerializeField] FloatRange bounceRange;
     [SerializeField] FloatRange frictionRange;
+    [SerializeField] FloatRange verticalDragRange;
     [SerializeField] float bounceForce;
     
     [Header("Other")]
@@ -36,15 +37,13 @@ public class BalloonMovement : MonoBehaviour
     bool _isAiming;
     float _curSize;
     float _gravity;
-
-    private Vector3 initialScale;
+    float _verticalDrag;
 
     float SizeLerp => _curSize;
     float InverseSizeLerp => 1 - SizeLerp;
 
     void Start()
     {
-        initialScale = rb.transform.localScale;
         inflateCooldown.Init();
         _waitForFixedUpdate = new WaitForFixedUpdate();
         UpdateValues();
@@ -57,6 +56,11 @@ public class BalloonMovement : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, 1f))
         {
             rb.AddForce(Vector3.up * (_gravity * SizeLerp * Time.fixedDeltaTime * 1.5f), ForceMode.Acceleration);
+        }
+
+        if(!_isDeflating)
+        {
+            rb.linearVelocity = rb.linearVelocity.With(y: rb.linearVelocity.y * _verticalDrag);
         }
         
         Rotate(_isDeflating || _isAiming);
@@ -90,7 +94,7 @@ public class BalloonMovement : MonoBehaviour
         if (_isDeflating) 
             return;
         
-        float speed = inflateSpeed * Time.deltaTime;
+        float speed = inflateSpeed * Time.fixedDeltaTime;
         _curSize = Mathf.Clamp01(_curSize + speed);
         
         UpdateValues();
@@ -129,8 +133,9 @@ public class BalloonMovement : MonoBehaviour
 
     void UpdateValues()
     {
-        transform.localScale = Vector3.Lerp(initialScale * scaleRange.Min, initialScale * scaleRange.Max, SizeLerp);
+        transform.localScale = Vector3.Lerp(Vector3.one * scaleRange.Min, Vector3.one * scaleRange.Max, SizeLerp);
         rb.linearDamping = dragRange.Lerp(SizeLerp);
+        _verticalDrag = verticalDragRange.Lerp(SizeLerp);
         rb.angularDamping = angularDragRange.Lerp(SizeLerp);
         col.material.bounciness = bounceRange.Lerp(SizeLerp);
         col.material.dynamicFriction = frictionRange.Lerp(InverseSizeLerp);
@@ -144,8 +149,8 @@ public class BalloonMovement : MonoBehaviour
         if (SizeLerp <= 0) return;
         
         float speed = speedRange.Lerp(SizeLerp) * Time.fixedDeltaTime;
-        //rb.AddForce(direction * speed, ForceMode.Acceleration);
-        softBody.DistributeForce(direction * speed, ForceMode.Acceleration);
+        rb.AddForce(direction * speed, ForceMode.Acceleration);
+        //softBody.DistributeForce(direction * speed, ForceMode.Acceleration);
     }
 
     void Bounce(Collision collision)
