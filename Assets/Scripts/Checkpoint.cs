@@ -23,4 +23,10 @@ public class Checkpoint : MonoBehaviour
             _manager.TrySetActiveCheckpoint(Index);
         }
     }
+
+    [ContextMenu("Set As Current")]
+    public void TrySetCurrentCheckpointContextAction()
+    {
+        _manager.TrySetActiveCheckpoint(Index);
+    }
 }
