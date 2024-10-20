@@ -18,6 +18,7 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] FloatRange frictionRange;
     [SerializeField] FloatRange verticalDragRange;
     [SerializeField] FloatRange collisionDampRange;
+    [SerializeField] LayerMask groundMask;
     
     [Header("Other")]
     [SerializeField] FloatRange speedRange;
@@ -37,6 +38,7 @@ public class BalloonMovement : MonoBehaviour
 
     WaitForFixedUpdate _waitForFixedUpdate;
     bool _isDeflating;
+    bool _canInflate = true;
     bool _isAiming;
     float _curSize;
     float _gravity;
@@ -55,21 +57,6 @@ public class BalloonMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce(Vector3.down * (_gravity * Time.fixedDeltaTime), ForceMode.Acceleration);
-
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1f))
-        {
-            if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Balloon"))
-            {
-                rb.AddForce(Vector3.up * (_gravity * SizeLerp * Time.fixedDeltaTime * 1.5f), ForceMode.Acceleration);
-            }
-        }
-
-        if(!_isDeflating)
-        {
-            rb.linearVelocity = rb.linearVelocity.With(y: rb.linearVelocity.y * _verticalDrag);
-        }
-        
         Rotate(_isDeflating || _isAiming);
         
         softBody.UpdateSprings(_softBodyParams ?? minSoftBodyParams);
@@ -77,6 +64,20 @@ public class BalloonMovement : MonoBehaviour
         softBody.transform.parent.position = rb.position;
         softBody.transform.parent.rotation = rb.rotation;
         softBody.transform.parent.localScale = transform.localScale;
+        
+        if (_isDeflating) return;
+        
+        rb.AddForce(Vector3.down * (_gravity * Time.fixedDeltaTime), ForceMode.Acceleration);
+
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1f, groundMask))
+        {
+            rb.AddForce(Vector3.up * (_gravity * SizeLerp * Time.fixedDeltaTime * 1.5f), ForceMode.Acceleration);
+        }
+
+        if(!_isDeflating)
+        {
+            rb.linearVelocity = rb.linearVelocity.With(y: rb.linearVelocity.y * _verticalDrag);
+        }
     }
 
     public void Rotate(bool faceCameraFwd)
@@ -106,7 +107,7 @@ public class BalloonMovement : MonoBehaviour
 
     public void Inflate()
     {
-        if (_isDeflating) 
+        if (!_canInflate) 
             return;
         
         float speed = inflateSpeed * Time.fixedDeltaTime;
@@ -128,6 +129,7 @@ public class BalloonMovement : MonoBehaviour
 
     IEnumerator DeflateRoutine()
     {
+        _canInflate = false;
         _isDeflating = true;
 
         while (_curSize > 0)
@@ -140,10 +142,11 @@ public class BalloonMovement : MonoBehaviour
 
             yield return _waitForFixedUpdate;
         }
-
-        yield return inflateCooldown.Wait;
-        
         _isDeflating = false;
+        
+        yield return inflateCooldown.Wait;
+
+        _canInflate = true;
     }
 
     void UpdateValues()
@@ -155,6 +158,8 @@ public class BalloonMovement : MonoBehaviour
         col.material.staticFriction = frictionRange.Lerp(InverseSizeLerp);
         _verticalDrag = verticalDragRange.Lerp(SizeLerp);
         _gravity = gravityRange.Lerp(SizeLerp);
+        
+                
         transform.localScale = scaleRange.Lerp(SizeLerp);
         _softBodyParams = SoftBodyParams.Lerp(minSoftBodyParams, maxSoftBodyParams, SizeLerp);
         
