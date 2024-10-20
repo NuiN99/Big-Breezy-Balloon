@@ -98,9 +98,9 @@ public class BalloonSounds : MonoBehaviour
 
     void PlayImpactSound(Collision other)
     {
-        float impactForce = other.GetContact(0).impulse.magnitude;
+        /*float impactForce = other.GetContact(0).impulse.magnitude;
         float volume = impactForce / maxImpactForce;
-        impactSource.volume = volume;
+        impactSource.volume = volume;*/
         int index =  Mathf.RoundToInt(movement.SizeLerp * (impactSounds.Length - 1));
         impactSource.pitch = impactSoundPitchRange.Random();
         impactSource.PlayOneShot(impactSounds[index]);
