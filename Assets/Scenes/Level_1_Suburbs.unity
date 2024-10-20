@@ -27338,14 +27338,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BalloonContainer
       objectReference: {fileID: 0}
-    - target: {fileID: 1245233493393814556, guid: 3534cb4f7bb158f4f8d939952b7970ce, type: 3}
-      propertyPath: camZoomRange.<Max>k__BackingField
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1245233493393814556, guid: 3534cb4f7bb158f4f8d939952b7970ce, type: 3}
-      propertyPath: camZoomRange.<Min>k__BackingField
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2972140240922414203, guid: 3534cb4f7bb158f4f8d939952b7970ce, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.8

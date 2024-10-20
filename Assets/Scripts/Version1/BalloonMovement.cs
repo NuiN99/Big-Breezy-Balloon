@@ -1,10 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using NuiN.NExtensions;
 using NuiN.SpleenTween;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BalloonMovement : MonoBehaviour
 {
+    public bool IsDeflating { get; private set; }
+    public bool IsInflating { get; private set; }
+    public float SizeLerp => _curSize;
+    public float InverseSizeLerp => 1 - SizeLerp;
+
+    public event Action OnStartDeflate = delegate { };
+    
     [Header("Dependencies")]
     [SerializeField] SoftBody softBody;
     [SerializeField] Rigidbody rb;
@@ -39,17 +48,13 @@ public class BalloonMovement : MonoBehaviour
     public Rigidbody RB => rb;
 
     WaitForFixedUpdate _waitForFixedUpdate;
-    bool _isDeflating;
     bool _canInflate = true;
     bool _isAiming;
     float _curSize;
     float _gravity;
     float _verticalDrag;
     SoftBodyParams _softBodyParams;
-
-    public float SizeLerp => _curSize;
-    float InverseSizeLerp => 1 - SizeLerp;
-
+    
     void Start()
     {
         inflateCooldown.Init();
@@ -59,7 +64,7 @@ public class BalloonMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Rotate(_isDeflating || _isAiming);
+        Rotate(IsDeflating || _isAiming);
         
         softBody.UpdateSprings(_softBodyParams ?? minSoftBodyParams);
         
@@ -67,7 +72,7 @@ public class BalloonMovement : MonoBehaviour
         softBody.transform.parent.rotation = rb.rotation;
         softBody.transform.parent.localScale = transform.localScale;
         
-        if (_isDeflating) return;
+        if (IsDeflating) return;
         
         rb.AddForce(Vector3.down * (_gravity * Time.fixedDeltaTime), ForceMode.Acceleration);
 
@@ -76,7 +81,7 @@ public class BalloonMovement : MonoBehaviour
             rb.AddForce(Vector3.up * (_gravity * SizeLerp * Time.fixedDeltaTime * 1.5f), ForceMode.Acceleration);
         }
 
-        if(!_isDeflating)
+        if(!IsDeflating)
         {
             rb.linearVelocity = rb.linearVelocity.With(y: rb.linearVelocity.y * _verticalDrag);
         }
@@ -113,6 +118,8 @@ public class BalloonMovement : MonoBehaviour
     {
         if (!_canInflate) 
             return;
+
+        IsInflating = true;
         
         float speed = inflateSpeed * Time.fixedDeltaTime;
         _curSize = Mathf.Clamp01(_curSize + speed);
@@ -120,13 +127,18 @@ public class BalloonMovement : MonoBehaviour
         UpdateValues();
     }
 
+    public void StopInflating()
+    {
+        IsInflating = false;
+    }
 
     public void Deflate()
     {
         _isAiming = false;
 
-        if (!_isDeflating && SizeLerp > 0)
+        if (!IsDeflating && SizeLerp > 0)
         {
+            OnStartDeflate.Invoke();
             StartCoroutine(DeflateRoutine());
         }
     }
@@ -134,7 +146,7 @@ public class BalloonMovement : MonoBehaviour
     IEnumerator DeflateRoutine()
     {
         _canInflate = false;
-        _isDeflating = true;
+        IsDeflating = true;
 
         while (_curSize > 0)
         {
@@ -146,7 +158,7 @@ public class BalloonMovement : MonoBehaviour
 
             yield return _waitForFixedUpdate;
         }
-        _isDeflating = false;
+        IsDeflating = false;
         
         yield return inflateCooldown.Wait;
 
@@ -178,7 +190,6 @@ public class BalloonMovement : MonoBehaviour
         
         float speed = speedRange.Lerp(SizeLerp) * Time.fixedDeltaTime;
         rb.AddForce(direction * speed, ForceMode.Acceleration);
-        //softBody.DistributeForce(direction * speed, ForceMode.Acceleration);
     }
 
     public void StartAiming()

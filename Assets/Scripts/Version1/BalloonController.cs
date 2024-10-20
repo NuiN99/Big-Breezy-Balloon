@@ -33,6 +33,11 @@ public class BalloonController : MonoBehaviour
         {
             movement.Inflate();
         }
+
+        else
+        {
+            movement.StopInflating();
+        }
         
         if (_controls.Balloon.Move.IsPressed())
         {
