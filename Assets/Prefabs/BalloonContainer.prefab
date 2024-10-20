@@ -1109,7 +1109,7 @@ MonoBehaviour:
   impactSoundPitchRange:
     <Min>k__BackingField: 0.8
     <Max>k__BackingField: 1.2
-  maxImpactForce: 3
+  maxImpactForce: 0.5
   impactSounds:
   - {fileID: 8300000, guid: 12a081a1d145e2a4089fd01a4833b25a, type: 3}
   - {fileID: 8300000, guid: c3d98d043b5151a498566f6d761222e3, type: 3}
