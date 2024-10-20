@@ -85,10 +85,12 @@ public class BalloonMovement : MonoBehaviour
     public void Rotate(bool faceCameraFwd)
     {
         float baseSpringStrength = faceCameraFwd ? 17.5f : 15f;
-        float damperStrength = faceCameraFwd ? 5f : 0.75f;
+        float damperStrength = faceCameraFwd ? 5f : 1f;
 
         Vector3 up = transform.up;
-        Vector3 fwd = faceCameraFwd ? PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized : Vector3.up + (Random.insideUnitSphere / 2);
+        Vector3 fwd = faceCameraFwd 
+            ? PlayerCamera.Instance.Forward.With(y: PlayerCamera.Instance.Forward.y * aimYMult).normalized 
+            : Vector3.up + (Vector3.ProjectOnPlane(rb.linearVelocity.With(y:0).normalized, Vector3.up) / 5f) + Random.insideUnitSphere / 1.5f;
         
         float angleFromUpright = Vector3.Angle(up, fwd);
     
