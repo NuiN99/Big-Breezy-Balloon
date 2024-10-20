@@ -1,4 +1,5 @@
-﻿using NuiN.SpleenTween;
+﻿using NuiN.ScriptableHarmony.Sound;
+using NuiN.SpleenTween;
 using UnityEngine;
 
 public class BalloonSounds : MonoBehaviour
@@ -7,10 +8,15 @@ public class BalloonSounds : MonoBehaviour
     
     [SerializeField] AudioSource deflateSource;
     [SerializeField] AudioSource inflateSource;
+    [SerializeField] AudioSource impactSource;
 
-    [SerializeField] FloatRange maxPitchRange;
+    [SerializeField] FloatRange maxDeflatePitchRange = new(5f, 6f);
 
     [SerializeField] float inflateVolume;
+
+    [SerializeField] FloatRange impactSoundPitchRange;
+    [SerializeField] float maxImpactForce = 7f;
+    [SerializeField] AudioClip[] impactSounds;
     
     ITween _inflateVolumeTween;
 
@@ -19,6 +25,7 @@ public class BalloonSounds : MonoBehaviour
         movement.OnStartDeflate += PlayDeflateSound;
         movement.OnStartInflate += PlayInflateSound;
         movement.OnStopInflate += StopInflateSound;
+        movement.OnColliison += PlayImpactSound;
     }
 
     void OnDisable()
@@ -26,6 +33,7 @@ public class BalloonSounds : MonoBehaviour
         movement.OnStartDeflate -= PlayDeflateSound;
         movement.OnStartInflate -= PlayInflateSound;
         movement.OnStopInflate -= StopInflateSound;
+        movement.OnColliison -= PlayImpactSound;
     }
 
     void PlayDeflateSound()
@@ -36,9 +44,9 @@ public class BalloonSounds : MonoBehaviour
         if (remainingDeflateTime > 0)
         {
             float pitch = deflateSource.clip.length / remainingDeflateTime;
-            if (pitch > maxPitchRange.Max)
+            if (pitch > maxDeflatePitchRange.Max)
             {
-                pitch = maxPitchRange.Random();
+                pitch = maxDeflatePitchRange.Random();
             }
 
             deflateSource.pitch = pitch;
@@ -78,5 +86,15 @@ public class BalloonSounds : MonoBehaviour
     {
         _inflateVolumeTween?.Stop();
         _inflateVolumeTween = SpleenTween.Vol(inflateSource, 0, 0.1f);
+    }
+
+    void PlayImpactSound(Collision other)
+    {
+        /*float impactForce = other.GetContact(0).impulse.magnitude;
+        float volume = impactForce / maxImpactForce;
+        impactSource.volume = volume;*/
+        int index =  Mathf.RoundToInt(movement.SizeLerp * (impactSounds.Length - 1));
+        impactSource.pitch = impactSoundPitchRange.Random();
+        impactSource.PlayOneShot(impactSounds[index]);
     }
 }

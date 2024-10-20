@@ -16,6 +16,7 @@ public class BalloonMovement : MonoBehaviour
     public event Action OnStartDeflate = delegate { };
     public event Action OnStartInflate = delegate { };
     public event Action OnStopInflate = delegate { };
+    public event Action<Collision> OnColliison = delegate { };
     
     [Header("Dependencies")]
     [SerializeField] SoftBody softBody;
@@ -115,6 +116,8 @@ public class BalloonMovement : MonoBehaviour
         float expoLerp = SpleenExt.GetEase(SizeLerp, Ease.OutExpo);
         float collisionDamp = collisionDampRange.Lerp(expoLerp);
         rb.linearVelocity *= collisionDamp;
+        
+        OnColliison.Invoke(other);
     }
 
     public void Inflate()
