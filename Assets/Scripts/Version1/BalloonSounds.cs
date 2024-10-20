@@ -6,21 +6,29 @@ public class BalloonSounds : MonoBehaviour
     [SerializeField] BalloonMovement movement;
     
     [SerializeField] AudioSource deflateSource;
-    [SerializeField] float deflateVolumeFadeDuration = 0.2f;
-    
+    [SerializeField] AudioSource inflateSource;
+
     [SerializeField] FloatRange maxPitchRange;
+
+    [SerializeField] float inflateVolume;
+    
+    ITween _inflateVolumeTween;
 
     void OnEnable()
     {
-        movement.OnStartDeflate += RandomizeDeflateSoundValues;
+        movement.OnStartDeflate += PlayDeflateSound;
+        movement.OnStartInflate += PlayInflateSound;
+        movement.OnStopInflate += StopInflateSound;
     }
 
     void OnDisable()
     {
-        movement.OnStartDeflate -= RandomizeDeflateSoundValues;
+        movement.OnStartDeflate -= PlayDeflateSound;
+        movement.OnStartInflate -= PlayInflateSound;
+        movement.OnStopInflate -= StopInflateSound;
     }
 
-    void RandomizeDeflateSoundValues()
+    void PlayDeflateSound()
     {
         deflateSource.Stop();
 
@@ -41,5 +49,34 @@ public class BalloonSounds : MonoBehaviour
         }
 
         deflateSource.Play();
+    }
+
+    void PlayInflateSound()
+    {
+        if (movement.SizeLerp >= 1f) return;
+        
+        _inflateVolumeTween?.Stop();
+        _inflateVolumeTween = SpleenTween.Vol(inflateSource, 0, inflateVolume, 0.1f);
+        
+        float totalInflateTime = (1f - movement.SizeLerp) / movement.InflateSpeed;
+
+        if (totalInflateTime > 0)
+        {
+            float pitch = inflateSource.clip.length / totalInflateTime;
+            inflateSource.pitch = pitch;
+        }
+        else
+        {
+            inflateSource.pitch = 1f;
+        }
+        
+        inflateSource.Stop();
+        inflateSource.Play();
+    }
+
+    void StopInflateSound()
+    {
+        _inflateVolumeTween?.Stop();
+        _inflateVolumeTween = SpleenTween.Vol(inflateSource, 0, 0.1f);
     }
 }
