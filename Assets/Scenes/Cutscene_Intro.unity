@@ -270,7 +270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: imageArray.Array.size
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[2]'
@@ -279,23 +279,23 @@ PrefabInstance:
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[3]'
       value: 
-      objectReference: {fileID: 2800000, guid: b1f83e8c36818ea4eaca273c39606c3d, type: 3}
+      objectReference: {fileID: 2800000, guid: 30d7f0531e6207d40af772d6c5f07748, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[4]'
       value: 
-      objectReference: {fileID: 2800000, guid: 4c187a86f6079804294fcbd67c2b7f3a, type: 3}
+      objectReference: {fileID: 2800000, guid: 156845372669e8442a3d76877ae3ef21, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[5]'
       value: 
-      objectReference: {fileID: 2800000, guid: 0dfcd36d0c27fed4e99f6ca9cc2c4a2f, type: 3}
+      objectReference: {fileID: 2800000, guid: 4626a665dd5d60544abc5b3e27f97a0f, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[6]'
       value: 
-      objectReference: {fileID: 2800000, guid: e5c53cd227248b246ae3b83db5a7c9dd, type: 3}
+      objectReference: {fileID: 2800000, guid: b5c394897c8e80b448b51376c2d87607, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[7]'
       value: 
-      objectReference: {fileID: 2800000, guid: 12ee15ac55024c340b8f0eecd45d971b, type: 3}
+      objectReference: {fileID: 2800000, guid: 85b494f82cd66d640891d5864756279c, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[8]'
       value: 
