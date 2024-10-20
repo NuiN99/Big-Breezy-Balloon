@@ -39,6 +39,7 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] FloatRange camZoomRange;
     [SerializeField] float inflateSpeed;
     [SerializeField] float aimYMult = 4f;
+    [SerializeField] float minPopSize = 0.2f;
 
     [Header("Soft Body")] 
     [SerializeField] SoftBodyParams minSoftBodyParams;
@@ -123,6 +124,15 @@ public class BalloonMovement : MonoBehaviour
         rb.linearVelocity *= collisionDamp;
         
         OnColliison.Invoke(other);
+    }
+
+    void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.CompareTag("Death") || (SizeLerp >= minPopSize && other.gameObject.CompareTag("Sharp")))
+        {
+            Destroy(transform.parent.gameObject);
+            GameEvents.InvokePlayerDied();
+        }
     }
 
     public void Inflate()
