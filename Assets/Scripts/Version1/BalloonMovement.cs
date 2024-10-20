@@ -11,8 +11,12 @@ public class BalloonMovement : MonoBehaviour
     public bool IsInflating { get; private set; }
     public float SizeLerp => _curSize;
     public float InverseSizeLerp => 1 - SizeLerp;
+    public float InflateSpeed => inflateSpeed;
 
     public event Action OnStartDeflate = delegate { };
+    public event Action OnStartInflate = delegate { };
+    public event Action OnStopInflate = delegate { };
+    public event Action<Collision> OnColliison = delegate { };
     
     [Header("Dependencies")]
     [SerializeField] SoftBody softBody;
@@ -44,7 +48,7 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] float deflateSpeed;
     [SerializeField] FloatRange deflateForceRange;
     [SerializeField] SerializedWaitForSeconds inflateCooldown;
-
+    
     public Rigidbody RB => rb;
 
     WaitForFixedUpdate _waitForFixedUpdate;
@@ -112,6 +116,8 @@ public class BalloonMovement : MonoBehaviour
         float expoLerp = SpleenExt.GetEase(SizeLerp, Ease.OutExpo);
         float collisionDamp = collisionDampRange.Lerp(expoLerp);
         rb.linearVelocity *= collisionDamp;
+        
+        OnColliison.Invoke(other);
     }
 
     public void Inflate()
@@ -119,6 +125,11 @@ public class BalloonMovement : MonoBehaviour
         if (!_canInflate) 
             return;
 
+        if (IsInflating == false)
+        {
+            OnStartInflate.Invoke();
+        }
+        
         IsInflating = true;
         
         float speed = inflateSpeed * Time.fixedDeltaTime;
@@ -129,6 +140,7 @@ public class BalloonMovement : MonoBehaviour
 
     public void StopInflating()
     {
+        OnStopInflate.Invoke();
         IsInflating = false;
     }
 
