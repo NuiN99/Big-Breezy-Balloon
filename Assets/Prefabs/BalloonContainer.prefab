@@ -1125,6 +1125,8 @@ MonoBehaviour:
   windPitchRange:
     <Min>k__BackingField: 1.25
     <Max>k__BackingField: 0.75
+  maxWindHeight: 10
+  windVolumeChangeSpeed: 0.001
 --- !u!82 &4263659648422088561
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1429,7 +1431,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 1f27cc8301d47b648b709102c7749890, type: 3}
   m_Resource: {fileID: 8300000, guid: 1f27cc8301d47b648b709102c7749890, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0

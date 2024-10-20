@@ -50,6 +50,8 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] SerializedWaitForSeconds inflateCooldown;
     
     public Rigidbody RB => rb;
+    
+    public float DistanceFromGround { get; private set; }
 
     WaitForFixedUpdate _waitForFixedUpdate;
     bool _canInflate = true;
@@ -80,10 +82,13 @@ public class BalloonMovement : MonoBehaviour
         
         rb.AddForce(Vector3.down * (_gravity * Time.fixedDeltaTime), ForceMode.Acceleration);
 
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1f, groundMask))
+        if (Physics.Raycast(transform.position, Vector3.down, 1f, groundMask))
         {
             rb.AddForce(Vector3.up * (_gravity * SizeLerp * Time.fixedDeltaTime * 1.5f), ForceMode.Acceleration);
         }
+
+        const float maxDist = 20f;
+        DistanceFromGround = Physics.Raycast(transform.position, Vector3.down, out RaycastHit groundHit, maxDist, groundMask) ? Vector3.Distance(transform.position, groundHit.point) : maxDist;
 
         if(!IsDeflating)
         {

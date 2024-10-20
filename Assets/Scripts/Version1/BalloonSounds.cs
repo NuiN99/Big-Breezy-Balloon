@@ -25,6 +25,8 @@ public class BalloonSounds : MonoBehaviour
     [SerializeField] float maxWindVelocity;
     [SerializeField] FloatRange windVolumeRange;
     [SerializeField] FloatRange windPitchRange;
+    [SerializeField] float maxWindHeight = 50f;
+    [SerializeField] float windVolumeChangeSpeed;
     
     ITween _inflateVolumeTween;
 
@@ -109,9 +111,10 @@ public class BalloonSounds : MonoBehaviour
     void FixedUpdate()
     {
         // maybe change pitch based on size?
-        
+
+        float heightLerp = movement.DistanceFromGround / maxWindHeight;
         float velLerp = movement.RB.linearVelocity.magnitude / maxWindVelocity;
-        windSource.volume = windVolumeRange.Lerp(velLerp);
+        windSource.volume = Mathf.MoveTowards(windSource.volume, windVolumeRange.Lerp(velLerp * heightLerp), windVolumeChangeSpeed);
         windSource.pitch = windPitchRange.Lerp(movement.SizeLerp);
     }
 }
