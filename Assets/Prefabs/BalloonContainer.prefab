@@ -1140,7 +1140,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: ad5880a6250e14f4b9d82d3fda6a63e1, type: 3}
   m_Resource: {fileID: 8300000, guid: ad5880a6250e14f4b9d82d3fda6a63e1, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.7
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3032,8 +3032,9 @@ MonoBehaviour:
   softBody: {fileID: 4815262266361210127}
   rb: {fileID: 2817686210040175006}
   col: {fileID: 8506242047406388534}
+  meshRenderer: {fileID: 1539607358529677429}
   gravityRange:
-    <Min>k__BackingField: 500
+    <Min>k__BackingField: 700
     <Max>k__BackingField: 100
   dragRange:
     <Min>k__BackingField: 0
@@ -3067,6 +3068,7 @@ MonoBehaviour:
     <Max>k__BackingField: 3
   inflateSpeed: 0.25
   aimYMult: 1
+  minPopSize: 0.2
   minSoftBodyParams:
     <Spring>k__BackingField: 10
     <Damper>k__BackingField: 1

@@ -17,7 +17,7 @@ public class BalloonSounds : MonoBehaviour
     [Header("Impact")]
     [SerializeField] AudioSource impactSource;
     [SerializeField] FloatRange impactSoundPitchRange;
-    [SerializeField] float maxImpactForce = 7f;
+    //[SerializeField] float maxImpactForce = 7f;
     [SerializeField] AudioClip[] impactSounds;
 
     [Header("Wind")] 

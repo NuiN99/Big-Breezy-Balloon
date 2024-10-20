@@ -3,6 +3,6 @@ using UnityEngine;
 
 public static class GameEvents
 {
-    public static event Action OnPlayerDied = delegate { };
-    public static void InvokePlayerDied() => OnPlayerDied.Invoke();
+    public static event Action<BalloonMovement> OnPlayerDied = delegate { };
+    public static void InvokePlayerDied(BalloonMovement balloon) => OnPlayerDied.Invoke(balloon);
 }

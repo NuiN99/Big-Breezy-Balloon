@@ -22,6 +22,7 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] SoftBody softBody;
     [SerializeField] Rigidbody rb;
     [SerializeField] Collider col;
+    [SerializeField] SkinnedMeshRenderer meshRenderer;
     
     [Header("Physics")]
     [SerializeField] FloatRange gravityRange;
@@ -119,6 +120,8 @@ public class BalloonMovement : MonoBehaviour
     
     void OnCollisionEnter(Collision other)
     {
+        DieOnCollision(other);
+        
         float expoLerp = SpleenExt.GetEase(SizeLerp, Ease.OutExpo);
         float collisionDamp = collisionDampRange.Lerp(expoLerp);
         rb.linearVelocity *= collisionDamp;
@@ -128,11 +131,34 @@ public class BalloonMovement : MonoBehaviour
 
     void OnCollisionStay(Collision other)
     {
+        DieOnCollision(other);
+    }
+
+    void DieOnCollision(Collision other)
+    {
         if (other.gameObject.CompareTag("Death") || (SizeLerp >= minPopSize && other.gameObject.CompareTag("Sharp")))
         {
-            Destroy(transform.parent.gameObject);
-            GameEvents.InvokePlayerDied();
+            DisableVisuals();
+            GameEvents.InvokePlayerDied(this);
         }
+    }
+
+    public void EnableVisuals()
+    {
+        meshRenderer.enabled = true;
+    }
+
+    void DisableVisuals()
+    {
+        meshRenderer.enabled = false;
+    }
+
+    public void ResetPhysics()
+    {
+        RB.linearVelocity = Vector3.zero;
+        RB.angularVelocity = Vector3.zero;
+        _curSize = 0;
+        UpdateValues();
     }
 
     public void Inflate()
