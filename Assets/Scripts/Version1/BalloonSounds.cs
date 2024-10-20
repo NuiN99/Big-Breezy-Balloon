@@ -6,17 +6,25 @@ public class BalloonSounds : MonoBehaviour
 {
     [SerializeField] BalloonMovement movement;
     
+    [Header("Deflate")]
     [SerializeField] AudioSource deflateSource;
-    [SerializeField] AudioSource inflateSource;
-    [SerializeField] AudioSource impactSource;
-
     [SerializeField] FloatRange maxDeflatePitchRange = new(5f, 6f);
-
+    
+    [Header("Inflate")]
+    [SerializeField] AudioSource inflateSource;
     [SerializeField] float inflateVolume;
 
+    [Header("Impact")]
+    [SerializeField] AudioSource impactSource;
     [SerializeField] FloatRange impactSoundPitchRange;
     [SerializeField] float maxImpactForce = 7f;
     [SerializeField] AudioClip[] impactSounds;
+
+    [Header("Wind")] 
+    [SerializeField] AudioSource windSource;
+    [SerializeField] float maxWindVelocity;
+    [SerializeField] FloatRange windVolumeRange;
+    [SerializeField] FloatRange windPitchRange;
     
     ITween _inflateVolumeTween;
 
@@ -90,11 +98,20 @@ public class BalloonSounds : MonoBehaviour
 
     void PlayImpactSound(Collision other)
     {
-        /*float impactForce = other.GetContact(0).impulse.magnitude;
+        float impactForce = other.GetContact(0).impulse.magnitude;
         float volume = impactForce / maxImpactForce;
-        impactSource.volume = volume;*/
+        impactSource.volume = volume;
         int index =  Mathf.RoundToInt(movement.SizeLerp * (impactSounds.Length - 1));
         impactSource.pitch = impactSoundPitchRange.Random();
         impactSource.PlayOneShot(impactSounds[index]);
+    }
+
+    void FixedUpdate()
+    {
+        // maybe change pitch based on size?
+        
+        float velLerp = movement.RB.linearVelocity.magnitude / maxWindVelocity;
+        windSource.volume = windVolumeRange.Lerp(velLerp);
+        windSource.pitch = windPitchRange.Lerp(movement.SizeLerp);
     }
 }
