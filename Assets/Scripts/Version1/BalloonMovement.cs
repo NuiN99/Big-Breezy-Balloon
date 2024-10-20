@@ -36,6 +36,8 @@ public class BalloonMovement : MonoBehaviour
     [SerializeField] FloatRange deflateForceRange;
     [SerializeField] SerializedWaitForSeconds inflateCooldown;
 
+    public Rigidbody RB => rb;
+
     WaitForFixedUpdate _waitForFixedUpdate;
     bool _isDeflating;
     bool _canInflate = true;
@@ -45,7 +47,7 @@ public class BalloonMovement : MonoBehaviour
     float _verticalDrag;
     SoftBodyParams _softBodyParams;
 
-    float SizeLerp => _curSize;
+    public float SizeLerp => _curSize;
     float InverseSizeLerp => 1 - SizeLerp;
 
     void Start()

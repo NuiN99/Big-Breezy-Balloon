@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
+using NuiN.NExtensions;
 using UnityEngine;
 
 public class WindArea : MonoBehaviour
 {
     [SerializeField] float force;
-    Rigidbody _balloonRB;
+    BalloonMovement _balloon;
 
     void Awake()
     {
-        _balloonRB = FindFirstObjectByType<BalloonController>().GetComponent<Rigidbody>();
+        _balloon = FindFirstObjectByType<BalloonMovement>();
     }
 
     void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("BalloonCollider"))
         {
-            _balloonRB.AddForce(transform.up * force, ForceMode.Acceleration);
+            _balloon.RB.AddForce(transform.up * (force * _balloon.SizeLerp * Time.fixedDeltaTime));
         }
     }
 }
