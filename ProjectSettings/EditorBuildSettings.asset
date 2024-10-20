@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/SplashScreen.unity
+    guid: 90737c2a1a2e8ff42954915b95842683
+  - enabled: 1
     path: Assets/Scenes/Game.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    guid: b0e6b82141766ad4ebf5e004c1d87e2e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: e22442f54b9c2f04daa6aab8a384ac0e, type: 3}
   m_UseUCBPForAssetBundles: 0
