@@ -13,6 +13,12 @@ public class SplashPanel : MonoBehaviour
 
     [SerializeField] private string levelOne = "";
 
+    private void Update()
+    {
+        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined;
+    }
+
     private async void Start()
     {
         inputProfile.onValueChanged.AddListener(OnProfileInputChange);

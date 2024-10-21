@@ -6,6 +6,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.Services.Leaderboards;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
