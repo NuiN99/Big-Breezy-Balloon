@@ -36,10 +36,12 @@ public class SplashPanel : MonoBehaviour
 
     private async Task SetPlayer()
     {
-        if (AuthenticationService.Instance.IsSignedIn)
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
             AuthenticationService.Instance.SwitchProfile(inputProfile.text);
-        
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+
         await AuthenticationService.Instance.UpdatePlayerNameAsync(inputProfile.text);
 
         Debug.Log($"Signed in with name: {AuthenticationService.Instance.PlayerName}");
