@@ -16,7 +16,7 @@ public class SplashPanel : MonoBehaviour
     private void Update()
     {
         Cursor.visible = true;
-        //Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     private async void Start()
