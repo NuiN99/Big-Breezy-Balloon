@@ -7,7 +7,8 @@ public class Checkpoint : MonoBehaviour
     public Quaternion RespawnRotation => respawnPosition.rotation;
     
     [SerializeField] Transform respawnPosition;
-    
+    [SerializeField] StarPickup star;
+
     CheckpointManager _manager;
     
     public void Init(CheckpointManager manager, int index)
@@ -20,6 +21,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Balloon"))
         {
+            if(star != null) star.Collect();
             _manager.TrySetActiveCheckpoint(Index);
         }
     }

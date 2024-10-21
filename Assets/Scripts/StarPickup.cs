@@ -1,4 +1,5 @@
 using System;
+using NuiN.NExtensions;
 using UnityEngine;
 
 public class StarPickup : MonoBehaviour
@@ -7,6 +8,8 @@ public class StarPickup : MonoBehaviour
     public float y_rise = 20.0f;
     public float y_rise_speed = 0.1f;
     private bool pickedUp = false;
+
+    [SerializeField] Timer riseTimer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,14 +26,22 @@ public class StarPickup : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            spin.rotationDirection = new Vector3(0f,5f,0f);
-            pickedUp = true;
+            
         }
+    }
+
+    public void Collect()
+    {
+        if (pickedUp) return;
+        riseTimer.Restart();
+        spin.rotationDirection = new Vector3(0f,5f,0f);
+        pickedUp = true;
     }
 
     void pickupStarAnimation()
     {
-        if(Math.Abs(transform.position.y - (transform.position.y + y_rise)) > 0.0001f)
+        spin.speed = 2f;
+        if(!riseTimer.IsComplete)
         {
             transform.position += new Vector3(0f,y_rise_speed,0f);
         } else {
