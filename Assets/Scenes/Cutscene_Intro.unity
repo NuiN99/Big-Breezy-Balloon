@@ -273,33 +273,41 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
+      propertyPath: 'imageArray.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2800000, guid: d26597b4efa9d8b43b308b860b4f6fef, type: 3}
+    - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
+      propertyPath: 'imageArray.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2800000, guid: b9b3c3dee831f904ab64a433e43b0f45, type: 3}
+    - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[2]'
       value: 
-      objectReference: {fileID: 2800000, guid: e0cc826053896a24789f0a12424e1d18, type: 3}
+      objectReference: {fileID: 2800000, guid: efc31fee29997d246937da87e6a3be90, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[3]'
       value: 
-      objectReference: {fileID: 2800000, guid: 30d7f0531e6207d40af772d6c5f07748, type: 3}
+      objectReference: {fileID: 2800000, guid: 9ff2fb704f5fb7d4eaadb15ea74a1762, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[4]'
       value: 
-      objectReference: {fileID: 2800000, guid: 156845372669e8442a3d76877ae3ef21, type: 3}
+      objectReference: {fileID: 2800000, guid: 266f0f7a1eda17a47a94fee9c5b52836, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[5]'
       value: 
-      objectReference: {fileID: 2800000, guid: 4626a665dd5d60544abc5b3e27f97a0f, type: 3}
+      objectReference: {fileID: 2800000, guid: 3318552a7fcfcb44a9363a293512fb70, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[6]'
       value: 
-      objectReference: {fileID: 2800000, guid: b5c394897c8e80b448b51376c2d87607, type: 3}
+      objectReference: {fileID: 2800000, guid: 31bfeafb9643a4e4baafec309132e6e3, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[7]'
       value: 
-      objectReference: {fileID: 2800000, guid: 85b494f82cd66d640891d5864756279c, type: 3}
+      objectReference: {fileID: 2800000, guid: 311a31544b2052f4fb6d84c948325dac, type: 3}
     - target: {fileID: 2219897896422490725, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: 'imageArray.Array.data[8]'
       value: 
-      objectReference: {fileID: 2800000, guid: 077a8b4b22dea8d469c73b0e839fa346, type: 3}
+      objectReference: {fileID: 2800000, guid: 0eefc6c65b56fa94a8fd2abc450e1cc1, type: 3}
     - target: {fileID: 4423324309022267155, guid: bde20b496b5a9ce4695d807434b0f714, type: 3}
       propertyPath: m_Name
       value: Slideshow

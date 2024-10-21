@@ -101,7 +101,7 @@ public class SR_RenderCamera : MonoBehaviour {
         UnityEngine.Debug.Log($"<saved image as currFace> elapsed: {sw.Elapsed}");
         FileCounter++;
 
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("CutScence_Intro");
     }
    
 }
