@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SR_RenderCamera : MonoBehaviour {
 
@@ -10,13 +11,21 @@ public class SR_RenderCamera : MonoBehaviour {
     Camera Cam;
     RenderTexture currentRT;
     public int res = 1024;
-    private static String facesPath = Application.dataPath + "/Drawings/Faces/";
-    static DirectoryInfo dir = new DirectoryInfo(facesPath);
+    private static string facesPath = Application.dataPath + "/Drawings/Faces/";
+    public static string curFacePath => Application.dataPath + "/Drawings/currFace.png";
+    public static byte[] curFaceBytes;
+    public static int faceWidth, faceHeight;
+    static DirectoryInfo dir;
 
     void Start()
     {
         Cam = GetComponent<Camera>();
         currentRT = RenderTexture.active;
+
+        if (Directory.Exists(facesPath) == false)
+            Directory.CreateDirectory(facesPath);
+
+        dir = new DirectoryInfo(facesPath);
         FileCounter = dir.GetFiles("*.png").Length; // find how many files are in the folder first.
     }
 
@@ -64,13 +73,15 @@ public class SR_RenderCamera : MonoBehaviour {
     void CamCapture()
     {
         Cam.Render();
-        Texture2D Image = new Texture2D(Cam.targetTexture.width, Cam.targetTexture.height);
+        Texture2D Image = new Texture2D(Cam.targetTexture.width, Cam.targetTexture.height, TextureFormat.ARGB32, false);
         RenderTexture.active = Cam.targetTexture;
         
         System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
         sw.Start();
         // read camera capture
-        Image.ReadPixels(new Rect(0, 0, Cam.targetTexture.width, Cam.targetTexture.height), 0, 0);
+        faceWidth = Cam.targetTexture.width;
+        faceHeight = Cam.targetTexture.height;
+        Image.ReadPixels(new Rect(0, 0, faceWidth, faceHeight), 0, 0);
         Image.Apply();
         UnityEngine.Debug.Log($"<got camera pixels> elapsed: {sw.Elapsed}");
         
@@ -80,15 +91,17 @@ public class SR_RenderCamera : MonoBehaviour {
         RenderTexture.active = currentRT;
         
         // encode to save
-        var Bytes = Image.EncodeToPNG();
+        curFaceBytes = Image.EncodeToPNG();
         Destroy(Image);
 
         // save image
-        File.WriteAllBytes(facesPath + FileCounter + ".png", Bytes);
+        File.WriteAllBytes(facesPath + FileCounter + ".png", curFaceBytes);
         UnityEngine.Debug.Log($"<saved image in faces> elapsed: {sw.Elapsed}");
-        File.WriteAllBytes(Application.dataPath + "/Drawings/currFace.png", Bytes);
+        File.WriteAllBytes(curFacePath, curFaceBytes);
         UnityEngine.Debug.Log($"<saved image as currFace> elapsed: {sw.Elapsed}");
         FileCounter++;
+
+        SceneManager.LoadScene("Game");
     }
    
 }

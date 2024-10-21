@@ -135,7 +135,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 0
+  m_CharacterLimit: 8
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -346,6 +346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 431036f54ed056340bcb39c52acda734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSetProfile: {fileID: 0}
+  inputProfile: {fileID: 0}
   levelOne: Game
 --- !u!1 &5226141509211532178
 GameObject:
@@ -708,7 +710,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 18.55
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -845,7 +847,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 18.55
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1

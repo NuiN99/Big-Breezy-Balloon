@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,10 +13,14 @@ public class SplashPanel : MonoBehaviour
 
     [SerializeField] private string levelOne = "";
 
-    private void Start()
+    private async void Start()
     {
         inputProfile.onValueChanged.AddListener(OnProfileInputChange);
         buttonSetProfile.onClick.AddListener(StartGame);
+
+        await UnityServices.Instance.InitializeAsync();
+        if (AuthenticationService.Instance.IsSignedIn)
+            AuthenticationService.Instance.SignOut();
     }
 
     private void OnProfileInputChange(string playerName)
@@ -31,8 +36,9 @@ public class SplashPanel : MonoBehaviour
 
     private async Task SetPlayer()
     {
-        AuthenticationService.Instance.SignOut();
-        AuthenticationService.Instance.SwitchProfile(inputProfile.text);
+        if (AuthenticationService.Instance.IsSignedIn)
+            AuthenticationService.Instance.SwitchProfile(inputProfile.text);
+        
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
         await AuthenticationService.Instance.UpdatePlayerNameAsync(inputProfile.text);
 

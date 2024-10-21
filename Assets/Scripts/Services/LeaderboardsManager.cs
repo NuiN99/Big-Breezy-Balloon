@@ -25,8 +25,6 @@ public class LeaderboardsManager : MonoBehaviour
 
     async void Awake()
     {
-        await UnityServices.InitializeAsync();
-        await SignInAnonymously();
         AuthenticationService.Instance.SignedIn += Instance_SignedIn;
         AuthenticationService.Instance.SignedOut += Instance_SignedOut;
         inputProfile.onValueChanged.AddListener(OnProfileInputChange);
