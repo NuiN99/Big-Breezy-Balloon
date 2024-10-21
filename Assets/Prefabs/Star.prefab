@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2224408127479152686}
-  - component: {fileID: 2397384417449201969}
   - component: {fileID: 7733696190620374145}
   - component: {fileID: 7689578516908351189}
   m_Layer: 0
@@ -29,33 +28,12 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8564675690351370075}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &2397384417449201969
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564073241156945008}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7733696190620374145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,7 +47,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   y_rise: 20
-  y_rise_speed: 0.1
+  y_rise_speed: 0.2
+  riseTimer:
+    startCompleted: 0
+    duration: 2
 --- !u!114 &7689578516908351189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationDirection: {x: 0, y: 1, z: 0}
   thingToSpin: {fileID: 9047739920027829729}
+  speed: 1
 --- !u!1001 &8165428910036383920
 PrefabInstance:
   m_ObjectHideFlags: 0
