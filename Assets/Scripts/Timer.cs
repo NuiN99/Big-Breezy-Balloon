@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.Services.Leaderboards;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class Timer : MonoBehaviour
@@ -29,10 +30,16 @@ public class Timer : MonoBehaviour
         textTimer.text = FormatTimestamp(Time.timeSinceLevelLoad);
     }
 
+    public void CompleteLevel()
+    {
+        OnLevelComplete();
+    }
+
     public static async void OnLevelComplete()
     {
         float score = Time.timeSinceLevelLoad;
         await LeaderboardsService.Instance.AddPlayerScoreAsync("track1", score);
+        SceneManager.LoadScene("SplashScreen");
     }
 
     public static string FormatTimestamp(double timestamp)

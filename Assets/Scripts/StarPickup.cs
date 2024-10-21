@@ -9,7 +9,7 @@ public class StarPickup : MonoBehaviour
     public float y_rise_speed = 0.1f;
     private bool pickedUp = false;
 
-    [SerializeField] Timer riseTimer;
+    [SerializeField] NuiN.NExtensions.Timer riseTimer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
